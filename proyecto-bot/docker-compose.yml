@@ -1,0 +1,88 @@
+version: '3.6'  
+services:
+
+  mongodbs:
+   image: mongo:latest
+   ports: 
+      - 27023:27023
+   networks: 
+      - network
+   container_name: mongodb_1
+   restart: 'always'
+   volumes:
+      - ./mongodata:/data/db_1
+      
+  rabbitmq:
+   image: rabbitmq:3-management
+   ports:
+      # The standard AMQP protocol port
+      - '5674:5674'
+      # HTTP management UI
+      - '15674:15674'
+   networks:
+      - network
+   container_name: rabbitmq
+   restart: 'always'
+
+  nestor_slack_reader:
+   build:
+     context: ./nestor_slack_reader
+   container_name: nestor_slack_reader
+   environment:
+      - RABBITMQ_HOST=rabbitmq
+   depends_on:
+      - rabbitmq
+   ports:
+      - 3000:3000   
+   networks:
+      - network
+
+  nestor_slack_writer:
+   build:
+     context: ./nestor_slack_writer
+   container_name: nestor_slack_writer
+   environment:
+      - RABBITMQ_HOST=rabbitmq
+   depends_on:
+      - rabbitmq   
+   networks:
+      - network
+
+  nestor_almacenar:
+   build:
+     context: ./nestor_almacenar
+   container_name: nestor_almacenar
+   environment:
+      - RABBITMQ_HOST=rabbitmq
+      - MONGO_HOST=mongodbs
+   depends_on:
+      - rabbitmq
+      - mongodbs
+   networks:
+      - network
+
+  nestor_muestra_mensajes:
+   build:
+     context: ./nestor_muestra_mensajes
+   container_name: nestor_muestra_mensajes
+   environment:
+      - RABBITMQ_HOST=rabbitmq
+      - MONGO_HOST=mongodbs
+   depends_on:
+      - rabbitmq
+      - mongodbs
+   networks:
+      - network
+
+  nestor_bot_help:
+   build:
+     context: ./nestor_bot_help
+   container_name: nestor_bot_help
+   environment:
+      - RABBITMQ_HOST=rabbitmq
+   depends_on:
+      - rabbitmq
+   networks:
+      - network
+networks:
+  network: {}
