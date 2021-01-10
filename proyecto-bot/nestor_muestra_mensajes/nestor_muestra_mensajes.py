@@ -84,11 +84,15 @@ def callback(ch, method, properties, body):
     if str(body).startswith("b'[programa*]"):
         programa_cu = programa_c.find()
         print(programa_cu)
+        count = 0
         for i in programa_cu:
             time.sleep(1)
-            channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='Programa del curso: '+str(i['programa']))
-
-
+            count += 1
+            if count == 1:
+                channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='Programa del curso: '+str(i['programa']))
+        
+        if count== 0:
+            channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='no existe programa asociado')
 
 channel.basic_consume(
     queue=queue_name, on_message_callback=callback, auto_ack=True)

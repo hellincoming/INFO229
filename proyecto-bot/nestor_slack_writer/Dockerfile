@@ -1,6 +1,6 @@
 FROM python:3.6.3
 
-ENV SLACK_TOKEN="xoxb-1503558912048-1503647302688-shnDxIeyBHOdXzcKDpmDcVPk"
+ENV SLACK_TOKEN="xoxb-1503558912048-1503647302688-3wHVlPw5nvEYWIodeGSaThgZ"
 
 COPY ./requirements.txt /requirements.txt
 

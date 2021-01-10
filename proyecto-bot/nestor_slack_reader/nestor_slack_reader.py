@@ -63,6 +63,9 @@ def message(payload):
     if (text.startswith("[link*]") or text.startswith("[fecha*]") or text.startswith('[cierre_semestre*]')
         or text.startswith('[programa*]')) :
         channel.basic_publish(exchange='nestor', routing_key="mostrar", body=text)
+        
+    if (text.startswith("[rm_link]") or text.startswith("[rm_fecha]") or text.startswith("[rm_cierre_semestre]") or text.startswith("[rm_programa]")) :
+        channel.basic_publish(exchange='nestor', routing_key="eliminar", body=text)
 
 if __name__ == "__main__":
     # Create the logging object

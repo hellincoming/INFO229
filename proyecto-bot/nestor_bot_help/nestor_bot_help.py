@@ -44,11 +44,21 @@ def callback(ch, method, properties, body):
         channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[cierre_semestre] -> almacena fin de semestre')
         channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[programa] -> almacena el programa del curso')
 
+        channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='-------------------------------------------------------------')
+
         channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='Historico de mensajes:')
         channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[link*] -> muestra los links publicados')
-        channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[fechas*] -> muestra las fechas publicadas')
+        channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[fecha*] -> muestra las fechas publicadas')
         channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[cierre_semestre*] -> Muestra el fin de semestre')
         channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[programa*] -> muestra el programa del curso')
+
+        channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='-------------------------------------------------------------')
+
+        channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='eliminar coleccion:')
+        channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[rm_link] -> elimina la coleccion link')
+        channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[rm_fecha] -> elimina la coleccion fecha')
+        channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[rm_cierre_semestre] -> elimina la coleccion cierre_semestre')
+        channel.basic_publish(exchange='nestor', routing_key="publicar_slack", body='[rm_programa] -> elimina la coleccion programa')
 
 channel.basic_consume(
     queue=queue_name, on_message_callback=callback, auto_ack=True)

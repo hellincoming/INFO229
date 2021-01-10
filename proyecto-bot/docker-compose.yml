@@ -73,6 +73,19 @@ services:
       - mongodbs
    networks:
       - network
+   
+  nestor_elimina_bd:
+   build:
+     context: ./nestor_elimina_bd
+   container_name: nestor_elimina_bd
+   environment:
+      - RABBITMQ_HOST=rabbitmq
+      - MONGO_HOST=mongodbs
+   depends_on:
+      - rabbitmq
+      - mongodbs
+   networks:
+      - network
 
   nestor_bot_help:
    build:
